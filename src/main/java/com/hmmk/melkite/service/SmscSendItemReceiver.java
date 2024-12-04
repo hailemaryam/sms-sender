@@ -17,12 +17,15 @@ public class SmscSendItemReceiver {
     @Inject
     QueueItemToSmscSendItemConvertor queueItemToSmscSendItemConvertor;
 
-    @Incoming("subscriber")
+    @Incoming("sdp-notify-sms-sender")
     @Blocking
     public void sendSms(WebServiceQueueItem webServiceQueueItem) {
-        SmscSendItem smscSendItem = queueItemToSmscSendItemConvertor.convert(webServiceQueueItem);
         try {
-            sendSMS.sendSMS(smscSendItem, "localhost", "8080");
+            SmscSendItem smscSendItem = queueItemToSmscSendItemConvertor.convert(webServiceQueueItem);
+            if(webServiceQueueItem.getUpdateType().equalsIgnoreCase("ok")
+                && smscSendItem != null ){
+                sendSMS.sendSMS(smscSendItem, "localhost", "8080");
+            }
         } catch (Exception e) {
             // todo handle this exception using logger and tenant problem notifier
             throw new RuntimeException(e);

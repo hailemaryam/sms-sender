@@ -27,7 +27,6 @@ public class SmscConfg {
     }
 
     @POST
-    @Path("get-smsc-config")
     @Consumes("application/json")
     @Produces("application/json")
     SmscConfigItem createOrUpdate(SmscConfigItem smscConfigItem) {
